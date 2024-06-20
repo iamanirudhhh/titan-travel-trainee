@@ -3,9 +3,10 @@ import Image from "next/image";
 import React from "react";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
-import { useStoryblokState, getStoryblokApi } from "@storyblok/react";
+import { useStoryblokState } from "@storyblok/react";
 import styled from "@emotion/styled";
 import { Alarm } from "@mui/icons-material";
+import { fetchStoryFromStoryblok } from "@/utils/fetchStoryFromStoryblok";
 
 const SignUp = ({ story }) => {
   story = useStoryblokState(story);
@@ -17,7 +18,7 @@ const SignUp = ({ story }) => {
         <Grid container component="main" className="main_grid">
           <Grid item xs={12} sm={12} md={6} square className="signup_container">
             <Box className="form_container">
-              {story?.content?.is_maintenance? (
+              {story?.content?.is_maintenance ? (
                 <>
                   <Box
                     sx={{
@@ -165,14 +166,17 @@ export async function getStaticProps() {
     version: "draft",
   };
 
-  const storyblokApi = getStoryblokApi();
-  let { data } = await storyblokApi.get(`cdn/stories/${slug}`, sbParams);
+  try {
+    const story = await fetchStoryFromStoryblok(slug, sbParams);
 
-  return {
-    props: {
-      story: data ? data.story : false,
-      key: data ? data.story.id : false,
-    },
-    revalidate: 3600,
-  };
+    return {
+      props: {
+        story: story,
+        key: story ? story.id : null,
+      },
+      revalidate: 3600,
+    };
+  } catch (error) {
+    console.error("Error in getStaticProps:", error);
+  }
 }

@@ -1,139 +1,145 @@
 import Image from "next/image";
 
-import { Button, Grid, Stack, TextField, Typography } from "@mui/material";
+import { Box, Button, Grid, Stack, TextField, Typography } from "@mui/material";
 import styled from "@emotion/styled";
 import HttpsOutlinedIcon from "@mui/icons-material/HttpsOutlined";
 
 import { useStoryblokState } from "@storyblok/react";
 
 import { fetchStoryFromStoryblok } from "@/utils/fetchStoryFromStoryblok";
+import { Alarm } from "@mui/icons-material";
 
 const Home = ({ story }) => {
   const loadedStory = useStoryblokState(story);
-  const isMaintenance = loadedStory?.content?.is_maintenance;
 
   return (
     <Wrapper>
       <Grid container sx={{ minHeight: "100vh", overflow: "hidden" }}>
-        {isMaintenance ? (
-            <Grid
-              container
-              justifyContent="center"
-              alignItems="center"
-            >
-              <Typography variant="h2" color="error" textAlign="center">
-                Site Under Maintenance
-              </Typography>
-            </Grid>
-        ) : (
-          <>
-            <Grid
-              item
-              xs={12}
-              sm={12}
-              md={6}
-              sx={{ backgroundColor: "#461a3e" }}
-            >
-              <Stack
-                direction={"column"}
-                spacing={5}
-                sx={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  height: "100%",
-                  padding: "2rem",
-                }}
-              >
-                <Typography variant="mainHeading">
-                  {loadedStory?.content?.login_main_heading}
-                </Typography>
-                <Typography className="subHeading">
-                  {loadedStory?.content?.login_sub_heading}
-                </Typography>
-              </Stack>
-            </Grid>
-            <Grid item xs={12} sm={12} md={6}>
-              <Stack className="login_container">
-                <Stack direction={"column"}>
-                  <Image
-                    height={100}
-                    width={200}
-                    alt="titan-travel"
-                    src={loadedStory?.content?.logo?.filename}
-                    unoptimized
-                    style={{ width: "11rem", height: "auto" }}
-                  />
-                  <Stack
-                    spacing={2}
-                    direction={"row"}
-                    sx={{ alignItems: "center", marginTop: 5 }}
-                  >
-                    <HttpsOutlinedIcon sx={{ fontSize: 30 }} />
-                    <Typography sx={{ fontWeight: "bold" }}>
-                      Safe and secure
-                    </Typography>
-                  </Stack>
+        <Grid item xs={12} sm={12} md={6} sx={{ backgroundColor: "#461a3e" }}>
+          <Stack
+            direction={"column"}
+            spacing={5}
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "100%",
+              padding: "2rem",
+            }}
+          >
+            <Typography variant="mainHeading">
+              {loadedStory?.content?.login_main_heading}
+            </Typography>
+            <Typography className="subHeading">
+              {loadedStory?.content?.login_sub_heading}
+            </Typography>
+          </Stack>
+        </Grid>
+        <Grid item xs={12} sm={12} md={6}>
+          <Stack className="login_container">
+            {story?.content?.is_maintenance ? (
+              <>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <Alarm style={{ color: "red", fontSize: "5rem" }} />
                   <Typography
-                    variant="h3"
-                    sx={{ fontWeight: "bold", marginTop: 3 }}
+                    variant="h2"
+                    sx={{ my: "1rem", textAlign: "center" }}
                   >
-                    {loadedStory?.content?.login_title}
+                    Website under maintenance
                   </Typography>
-                  <TextField
-                    required
-                    focused
-                    id="outlined-required"
-                    label="ABTA/ATAS or AFTA number"
-                    sx={{
-                      marginTop: 5,
-                    }}
-                  />
-                  <TextField
-                    required
-                    focused
-                    id="outlined-required"
-                    label="Password"
-                    sx={{
-                      marginTop: 3,
-                    }}
-                  />
-                  <Typography
-                    variant="subtitle1"
-                    sx={{
-                      color: "#9f5890",
-                      marginTop: 3,
-                      fontWeight: 500,
-                      marginLeft: "auto",
-                    }}
-                  >
-                    Forgot password?
+                  <Typography sx={{ color: "red", textAlign: "center" }}>
+                    Due to technical issues or scheduled maintenance, the login
+                    functionality is currently disabled.Please try again later.
+                    Thank you for your patience and understanding.
                   </Typography>
-                  <Button
-                    sx={{
-                      marginTop: 3,
-                    }}
-                    variant="contained"
-                  >
-                    {loadedStory?.content?.login_button_label}
-                  </Button>
-                  <Typography
-                    variant="subtitle1"
-                    sx={{
-                      color: "#9f5890",
-                      my: 3,
-                      textDecoration: "underline",
-                      fontWeight: 500,
-                      textAlign: "center",
-                    }}
-                  >
-                    I&apos;m a customer
+                </Box>
+              </>
+            ) : (
+              <Stack direction={"column"}>
+                <Image
+                  height={100}
+                  width={200}
+                  alt="titan-travel"
+                  src={loadedStory?.content?.logo?.filename}
+                  unoptimized
+                  style={{ width: "11rem", height: "auto" }}
+                />
+                <Stack
+                  spacing={2}
+                  direction={"row"}
+                  sx={{ alignItems: "center", marginTop: 5 }}
+                >
+                  <HttpsOutlinedIcon sx={{ fontSize: 30 }} />
+                  <Typography sx={{ fontWeight: "bold" }}>
+                    Safe and secure
                   </Typography>
                 </Stack>
+                <Typography
+                  variant="h3"
+                  sx={{ fontWeight: "bold", marginTop: 3 }}
+                >
+                  {loadedStory?.content?.login_title}
+                </Typography>
+                <TextField
+                  required
+                  focused
+                  id="outlined-required"
+                  label="ABTA/ATAS or AFTA number"
+                  sx={{
+                    marginTop: 5,
+                  }}
+                />
+                <TextField
+                  required
+                  focused
+                  id="outlined-required"
+                  label="Password"
+                  sx={{
+                    marginTop: 3,
+                  }}
+                />
+                <Typography
+                  variant="subtitle1"
+                  sx={{
+                    color: "#9f5890",
+                    marginTop: 3,
+                    fontWeight: 500,
+                    marginLeft: "auto",
+                  }}
+                >
+                  Forgot password?
+                </Typography>
+                <Button
+                  sx={{
+                    marginTop: 3,
+                  }}
+                  variant="contained"
+                >
+                  {loadedStory?.content?.login_button_label}
+                </Button>
+                <Typography
+                  variant="subtitle1"
+                  sx={{
+                    color: "#9f5890",
+                    my: 3,
+                    textDecoration: "underline",
+                    fontWeight: 500,
+                    textAlign: "center",
+                  }}
+                >
+                  I&apos;m a customer
+                </Typography>
               </Stack>
-            </Grid>
-          </>
-        )}
+            )}
+          </Stack>
+        </Grid>
       </Grid>
     </Wrapper>
   );
